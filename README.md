@@ -551,21 +551,21 @@ Other Style Guides
 ## Strings
 
   <a name="strings--quotes"></a><a name="6.1"></a>
-  - [6.1](#strings--quotes) Use single quotes `''` for strings. eslint: [`quotes`](https://eslint.org/docs/rules/quotes.html) jscs: [`validateQuoteMarks`](http://jscs.info/rule/validateQuoteMarks)
+  - [6.1](#strings--quotes) Use double quotes `""` for strings. eslint: [`quotes`](https://eslint.org/docs/rules/quotes.html) jscs: [`validateQuoteMarks`](http://jscs.info/rule/validateQuoteMarks)
 
     ```javascript
     // bad
-    const name = "Capt. Janeway";
+    const name = 'Capt. Janeway';
 
     // bad - template literals should contain interpolation or newlines
     const name = `Capt. Janeway`;
 
     // good
-    const name = 'Capt. Janeway';
+    const name = "Capt. Janeway";
     ```
 
   <a name="strings--line-length"></a><a name="6.2"></a>
-  - [6.2](#strings--line-length) Strings that cause the line to go over 100 characters should not be written across multiple lines using string concatenation.
+  - [6.2](#strings--line-length) Strings that cause the line to go over 80 characters should not be written across multiple lines using string concatenation.
 
     > Why? Broken strings are painful to work with and make code less searchable.
 
@@ -982,7 +982,7 @@ Other Style Guides
     ```
 
   <a name="arrows--paren-wrap"></a><a name="8.3"></a>
-  - [8.3](#arrows--paren-wrap) In case the expression spans over multiple lines, wrap it in parentheses for better readability.
+  - [8.3](#arrows--paren-wrap) In case the expression spans over multiple lines, wrap it in brackets for better readability, but follow [8.4](#arrows--one-arg-parens) and wrap any arguments in parentheses.
 
     > Why? It shows clearly where the function starts and ends.
 
@@ -993,14 +993,31 @@ Other Style Guides
         httpMethod,
       )
     );
-
-    // good
+    
+    // bad
     ['get', 'post', 'put'].map(httpMethod => (
       Object.prototype.hasOwnProperty.call(
         httpMagicObjectWithAVeryLongName,
         httpMethod,
       )
     ));
+    
+    // bad
+    ['get', 'post', 'put'].map(httpMethod => {
+      Object.prototype.hasOwnProperty.call(
+        httpMagicObjectWithAVeryLongName,
+        httpMethod,
+      )
+    });
+
+    // good
+    // Subtly different, but it uses brackets and paren-wrapped arguments
+    ['get', 'post', 'put'].map((httpMethod) => {
+      Object.prototype.hasOwnProperty.call(
+        httpMagicObjectWithAVeryLongName,
+        httpMethod,
+      )
+    });
     ```
 
   <a name="arrows--one-arg-parens"></a><a name="8.4"></a>
@@ -1420,13 +1437,8 @@ Other Style Guides
     const increasedByOne = numbers.map(num => num + 1);
     ```
 
-  <a name="generators--nope"></a><a name="11.2"></a>
-  - [11.2](#generators--nope) Don’t use generators for now.
-
-    > Why? They don’t transpile well to ES5.
-
   <a name="generators--spacing"></a>
-  - [11.3](#generators--spacing) If you must use generators, or if you disregard [our advice](#generators--nope), make sure their function signature is spaced properly. eslint: [`generator-star-spacing`](https://eslint.org/docs/rules/generator-star-spacing)
+  - [11.2](#generators--spacing) Make sure generator function signatures are spaced properly. eslint: [`generator-star-spacing`](https://eslint.org/docs/rules/generator-star-spacing)
 
     > Why? `function` and `*` are part of the same conceptual keyword - `*` is not a modifier for `function`, `function*` is a unique construct, different from `function`.
 
@@ -1827,7 +1839,7 @@ Other Style Guides
 ## Comparison Operators & Equality
 
   <a name="comparison--eqeqeq"></a><a name="15.1"></a>
-  - [15.1](#comparison--eqeqeq) Use `===` and `!==` over `==` and `!=`. eslint: [`eqeqeq`](https://eslint.org/docs/rules/eqeqeq.html)
+  - [15.1](#comparison--eqeqeq) Use `===` and `!==` over `==` and `!=` EXCEPT in the case of null. eslint: [`eqeqeq`](https://eslint.org/docs/rules/eqeqeq.html)
 
   <a name="comparison--if"></a><a name="15.2"></a>
   - [15.2](#comparison--if) Conditional statements such as the `if` statement evaluate their expression using coercion with the `ToBoolean` abstract method and always follow these simple rules:
@@ -1969,7 +1981,7 @@ Other Style Guides
     ```
 
   <a name="comparison--no-mixed-operators"></a>
-  - [15.8](#comparison--no-mixed-operators) When mixing operators, enclose them in parentheses. The only exception is the standard arithmetic operators (`+`, `-`, `*`, & `/`) since their precedence is broadly understood. eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
+  - [15.8](#comparison--no-mixed-operators) When mixing operators, enclose them in parentheses. The only exception is when using only standard arithmetic operators that have the same order of operation (`+` mixed with only `-`, or `*` mixed with only `/`). eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
 
     > Why? This improves readability and clarifies the developer’s intention.
 
@@ -1985,6 +1997,9 @@ Other Style Guides
     if (a || b && c) {
       return d;
     }
+    
+    // bad
+    const bar = a + b / c * d;
 
     // good
     const foo = (a && b < 0) || c > 0 || (d + 1 === 0);
@@ -1996,9 +2011,9 @@ Other Style Guides
     if (a || (b && c)) {
       return d;
     }
-
+    
     // good
-    const bar = a + b / c * d;
+    const bar = a + (b / (c * d));
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -2121,7 +2136,7 @@ Other Style Guides
 
 ## Control Statements
 
-  <a name="control-statements"></a>
+  <a name="control-statements"></a><a name="17.1"></a>
   - [17.1](#control-statements) In case your control statement (`if`, `while` etc.) gets too long or exceeds the maximum line length, each (grouped) condition could be put into a new line. The logical operator should begin the line.
 
     > Why? Requiring operators at the beginning of the line keeps the operators aligned and follows a pattern similar to method chaining. This also improves readability by making it easier to visually follow complex logic.
@@ -2175,7 +2190,7 @@ Other Style Guides
     }
     ```
 
-  <a name="control-statement--value-selection"></a>
+  <a name="control-statement--value-selection"></a><a name="17.2"></a>
   - [17.2](#control-statements--value-selection) Don't use selection operators in place of control statements.
 
     ```javascript
@@ -2192,7 +2207,7 @@ Other Style Guides
 
 ## Comments
 
-  <a name="comments--multiline"></a><a name="17.1"></a>
+  <a name="comments--multiline"></a><a name="18.1"></a>
   - [18.1](#comments--multiline) Use `/** ... */` for multi-line comments.
 
     ```javascript
@@ -2222,7 +2237,7 @@ Other Style Guides
     }
     ```
 
-  <a name="comments--singleline"></a><a name="17.2"></a>
+  <a name="comments--singleline"></a><a name="18.2"></a>
   - [18.2](#comments--singleline) Use `//` for single line comments. Place single line comments on a newline above the subject of the comment. Put an empty line before the comment unless it’s on the first line of a block.
 
     ```javascript
@@ -2261,7 +2276,7 @@ Other Style Guides
     }
     ```
 
-  <a name="comments--spaces"></a>
+  <a name="comments--spaces"></a><a name="18.3"></a>
   - [18.3](#comments--spaces) Start all comments with a space to make it easier to read. eslint: [`spaced-comment`](https://eslint.org/docs/rules/spaced-comment)
 
     ```javascript
@@ -2298,10 +2313,10 @@ Other Style Guides
     }
     ```
 
-  <a name="comments--actionitems"></a><a name="17.3"></a>
+  <a name="comments--actionitems"></a><a name="18.4"></a>
   - [18.4](#comments--actionitems) Prefixing your comments with `FIXME` or `TODO` helps other developers quickly understand if you're pointing out a problem that needs to be revisited, or if you're suggesting a solution to the problem that needs to be implemented. These are different than regular comments because they are actionable. The actions are `FIXME: -- need to figure this out` or `TODO: -- need to implement`.
 
-  <a name="comments--fixme"></a><a name="17.4"></a>
+  <a name="comments--fixme"></a><a name="18.5"></a>
   - [18.5](#comments--fixme) Use `// FIXME:` to annotate problems.
 
     ```javascript
@@ -2315,7 +2330,7 @@ Other Style Guides
     }
     ```
 
-  <a name="comments--todo"></a><a name="17.5"></a>
+  <a name="comments--todo"></a><a name="18.6"></a>
   - [18.6](#comments--todo) Use `// TODO:` to annotate solutions to problems.
 
     ```javascript
@@ -2333,7 +2348,7 @@ Other Style Guides
 
 ## Whitespace
 
-  <a name="whitespace--spaces"></a><a name="18.1"></a>
+  <a name="whitespace--spaces"></a><a name="19.1"></a>
   - [19.1](#whitespace--spaces) Use soft tabs (space character) set to 2 spaces. eslint: [`indent`](https://eslint.org/docs/rules/indent.html) jscs: [`validateIndentation`](http://jscs.info/rule/validateIndentation)
 
     ```javascript
@@ -2353,7 +2368,7 @@ Other Style Guides
     }
     ```
 
-  <a name="whitespace--before-blocks"></a><a name="18.2"></a>
+  <a name="whitespace--before-blocks"></a><a name="19.2"></a>
   - [19.2](#whitespace--before-blocks) Place 1 space before the leading brace. eslint: [`space-before-blocks`](https://eslint.org/docs/rules/space-before-blocks.html) jscs: [`requireSpaceBeforeBlockStatements`](http://jscs.info/rule/requireSpaceBeforeBlockStatements)
 
     ```javascript
@@ -2380,7 +2395,7 @@ Other Style Guides
     });
     ```
 
-  <a name="whitespace--around-keywords"></a><a name="18.3"></a>
+  <a name="whitespace--around-keywords"></a><a name="19.3"></a>
   - [19.3](#whitespace--around-keywords) Place 1 space before the opening parenthesis in control statements (`if`, `while` etc.). Place no space between the argument list and the function name in function calls and declarations. eslint: [`keyword-spacing`](https://eslint.org/docs/rules/keyword-spacing.html) jscs: [`requireSpaceAfterKeywords`](http://jscs.info/rule/requireSpaceAfterKeywords)
 
     ```javascript
@@ -2405,7 +2420,7 @@ Other Style Guides
     }
     ```
 
-  <a name="whitespace--infix-ops"></a><a name="18.4"></a>
+  <a name="whitespace--infix-ops"></a><a name="19.4"></a>
   - [19.4](#whitespace--infix-ops) Set off operators with spaces. eslint: [`space-infix-ops`](https://eslint.org/docs/rules/space-infix-ops.html) jscs: [`requireSpaceBeforeBinaryOperators`](http://jscs.info/rule/requireSpaceBeforeBinaryOperators), [`requireSpaceAfterBinaryOperators`](http://jscs.info/rule/requireSpaceAfterBinaryOperators)
 
     ```javascript
@@ -2416,7 +2431,7 @@ Other Style Guides
     const x = y + 5;
     ```
 
-  <a name="whitespace--newline-at-end"></a><a name="18.5"></a>
+  <a name="whitespace--newline-at-end"></a><a name="19.5"></a>
   - [19.5](#whitespace--newline-at-end) End files with a single newline character. eslint: [`eol-last`](https://github.com/eslint/eslint/blob/master/docs/rules/eol-last.md)
 
     ```javascript
@@ -2441,7 +2456,7 @@ Other Style Guides
     export default es6;↵
     ```
 
-  <a name="whitespace--chains"></a><a name="18.6"></a>
+  <a name="whitespace--chains"></a><a name="19.6"></a>
   - [19.6](#whitespace--chains) Use indentation when making long method chains (more than 2 method chains). Use a leading dot, which
     emphasizes that the line is a method call, not a new statement. eslint: [`newline-per-chained-call`](https://eslint.org/docs/rules/newline-per-chained-call) [`no-whitespace-before-property`](https://eslint.org/docs/rules/no-whitespace-before-property)
 
@@ -2485,7 +2500,7 @@ Other Style Guides
     const leds = stage.selectAll('.led').data(data);
     ```
 
-  <a name="whitespace--after-blocks"></a><a name="18.7"></a>
+  <a name="whitespace--after-blocks"></a><a name="19.7"></a>
   - [19.7](#whitespace--after-blocks) Leave a blank line after blocks and before the next statement. jscs: [`requirePaddingNewLinesAfterBlocks`](http://jscs.info/rule/requirePaddingNewLinesAfterBlocks)
 
     ```javascript
@@ -2543,7 +2558,7 @@ Other Style Guides
     return arr;
     ```
 
-  <a name="whitespace--padded-blocks"></a><a name="18.8"></a>
+  <a name="whitespace--padded-blocks"></a><a name="19.8"></a>
   - [19.8](#whitespace--padded-blocks) Do not pad your blocks with blank lines. eslint: [`padded-blocks`](https://eslint.org/docs/rules/padded-blocks.html) jscs:  [`disallowPaddingNewlinesInBlocks`](http://jscs.info/rule/disallowPaddingNewlinesInBlocks)
 
     ```javascript
@@ -2584,7 +2599,7 @@ Other Style Guides
     }
     ```
 
-  <a name="whitespace--in-parens"></a><a name="18.9"></a>
+  <a name="whitespace--in-parens"></a><a name="19.9"></a>
   - [19.9](#whitespace--in-parens) Do not add spaces inside parentheses. eslint: [`space-in-parens`](https://eslint.org/docs/rules/space-in-parens.html) jscs: [`disallowSpacesInsideParentheses`](http://jscs.info/rule/disallowSpacesInsideParentheses)
 
     ```javascript
@@ -2609,7 +2624,7 @@ Other Style Guides
     }
     ```
 
-  <a name="whitespace--in-brackets"></a><a name="18.10"></a>
+  <a name="whitespace--in-brackets"></a><a name="19.10"></a>
   - [19.10](#whitespace--in-brackets) Do not add spaces inside brackets. eslint: [`array-bracket-spacing`](https://eslint.org/docs/rules/array-bracket-spacing.html) jscs: [`disallowSpacesInsideArrayBrackets`](http://jscs.info/rule/disallowSpacesInsideArrayBrackets)
 
     ```javascript
@@ -2622,7 +2637,7 @@ Other Style Guides
     console.log(foo[0]);
     ```
 
-  <a name="whitespace--in-braces"></a><a name="18.11"></a>
+  <a name="whitespace--in-braces"></a><a name="19.11"></a>
   - [19.11](#whitespace--in-braces) Add spaces inside curly braces. eslint: [`object-curly-spacing`](https://eslint.org/docs/rules/object-curly-spacing.html) jscs: [`requireSpacesInsideObjectBrackets`](http://jscs.info/rule/requireSpacesInsideObjectBrackets)
 
     ```javascript
@@ -2633,7 +2648,7 @@ Other Style Guides
     const foo = { clark: 'kent' };
     ```
 
-  <a name="whitespace--max-len"></a><a name="18.12"></a>
+  <a name="whitespace--max-len"></a><a name="19.12"></a>
   - [19.12](#whitespace--max-len) Avoid having lines of code that are longer than 100 characters (including whitespace). Note: per [above](#strings--line-length), long strings are exempt from this rule, and should not be broken up. eslint: [`max-len`](https://eslint.org/docs/rules/max-len.html) jscs: [`maximumLineLength`](http://jscs.info/rule/maximumLineLength)
 
     > Why? This ensures readability and maintainability.
@@ -2667,7 +2682,7 @@ Other Style Guides
 
 ## Commas
 
-  <a name="commas--leading-trailing"></a><a name="19.1"></a>
+  <a name="commas--leading-trailing"></a><a name="20.1"></a>
   - [20.1](#commas--leading-trailing) Leading commas: **Nope.** eslint: [`comma-style`](https://eslint.org/docs/rules/comma-style.html) jscs: [`requireCommaBeforeLineBreak`](http://jscs.info/rule/requireCommaBeforeLineBreak)
 
     ```javascript
@@ -2702,7 +2717,7 @@ Other Style Guides
     };
     ```
 
-  <a name="commas--dangling"></a><a name="19.2"></a>
+  <a name="commas--dangling"></a><a name="20.2"></a>
   - [20.2](#commas--dangling) Additional trailing comma: **Yup.** eslint: [`comma-dangle`](https://eslint.org/docs/rules/comma-dangle.html) jscs: [`requireTrailingComma`](http://jscs.info/rule/requireTrailingComma)
 
     > Why? This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code which means you don’t have to worry about the [trailing comma problem](https://github.com/airbnb/javascript/blob/es5-deprecated/es5/README.md#commas) in legacy browsers.
@@ -2802,8 +2817,8 @@ Other Style Guides
 
 ## Semicolons
 
-  <a name="semicolons--required"></a><a name="20.1"></a>
-  - [21.1](#semicolons--required) **Yup.** eslint: [`semi`](https://eslint.org/docs/rules/semi.html) jscs: [`requireSemicolons`](http://jscs.info/rule/requireSemicolons)
+  <a name="semicolons--disallowed"></a><a name="21.1"></a>
+  - [21.1](#semicolons--disallowed) **Nope.** eslint: [`semi`](https://eslint.org/docs/rules/semi.html) jscs: [`disallowSemicolons`](http://jscs.info/rule/disallowSemicolons)
 
     > Why? When JavaScript encounters a line break without a semicolon, it uses a set of rules called [Automatic Semicolon Insertion](https://tc39.github.io/ecma262/#sec-automatic-semicolon-insertion) to determine whether or not it should regard that line break as the end of a statement, and (as the name implies) place a semicolon into your code before the line break if it thinks so. ASI contains a few eccentric behaviors, though, and your code will break if JavaScript misinterprets your line break. These rules will become more complicated as new features become a part of JavaScript. Explicitly terminating your statements and configuring your linter to catch missing semicolons will help prevent you from encountering issues.
 
@@ -2852,10 +2867,10 @@ Other Style Guides
 
 ## Type Casting & Coercion
 
-  <a name="coercion--explicit"></a><a name="21.1"></a>
+  <a name="coercion--explicit"></a><a name="22.1"></a>
   - [22.1](#coercion--explicit) Perform type coercion at the beginning of the statement.
 
-  <a name="coercion--strings"></a><a name="21.2"></a>
+  <a name="coercion--strings"></a><a name="22.2"></a>
   - [22.2](#coercion--strings)  Strings: eslint: [`no-new-wrappers`](https://eslint.org/docs/rules/no-new-wrappers)
 
     ```javascript
@@ -2874,7 +2889,7 @@ Other Style Guides
     const totalScore = String(this.reviewScore);
     ```
 
-  <a name="coercion--numbers"></a><a name="21.3"></a>
+  <a name="coercion--numbers"></a><a name="22.3"></a>
   - [22.3](#coercion--numbers) Numbers: Use `Number` for type casting and `parseInt` always with a radix for parsing strings. eslint: [`radix`](https://eslint.org/docs/rules/radix) [`no-new-wrappers`](https://eslint.org/docs/rules/no-new-wrappers)
 
     ```javascript
@@ -2899,7 +2914,7 @@ Other Style Guides
     const val = parseInt(inputValue, 10);
     ```
 
-  <a name="coercion--comment-deviations"></a><a name="21.4"></a>
+  <a name="coercion--comment-deviations"></a><a name="22.4"></a>
   - [22.4](#coercion--comment-deviations) If for whatever reason you are doing something wild and `parseInt` is your bottleneck and need to use Bitshift for [performance reasons](https://jsperf.com/coercion-vs-casting/3), leave a comment explaining why and what you're doing.
 
     ```javascript
@@ -2912,7 +2927,7 @@ Other Style Guides
     const val = inputValue >> 0;
     ```
 
-  <a name="coercion--bitwise"></a><a name="21.5"></a>
+  <a name="coercion--bitwise"></a><a name="22.5"></a>
   - [22.5](#coercion--bitwise) **Note:** Be careful when using bitshift operations. Numbers are represented as [64-bit values](https://es5.github.io/#x4.3.19), but bitshift operations always return a 32-bit integer ([source](https://es5.github.io/#x11.7)). Bitshift can lead to unexpected behavior for integer values larger than 32 bits. [Discussion](https://github.com/airbnb/javascript/issues/109). Largest signed 32-bit Int is 2,147,483,647:
 
     ```javascript
@@ -2941,7 +2956,7 @@ Other Style Guides
 
 ## Naming Conventions
 
-  <a name="naming--descriptive"></a><a name="22.1"></a>
+  <a name="naming--descriptive"></a><a name="23.1"></a>
   - [23.1](#naming--descriptive) Avoid single letter names. Be descriptive with your naming. eslint: [`id-length`](https://eslint.org/docs/rules/id-length)
 
     ```javascript
@@ -2956,7 +2971,7 @@ Other Style Guides
     }
     ```
 
-  <a name="naming--camelCase"></a><a name="22.2"></a>
+  <a name="naming--camelCase"></a><a name="23.2"></a>
   - [23.2](#naming--camelCase) Use camelCase when naming objects, functions, and instances. eslint: [`camelcase`](https://eslint.org/docs/rules/camelcase.html) jscs: [`requireCamelCaseOrUpperCaseIdentifiers`](http://jscs.info/rule/requireCamelCaseOrUpperCaseIdentifiers)
 
     ```javascript
@@ -2970,7 +2985,7 @@ Other Style Guides
     function thisIsMyFunction() {}
     ```
 
-  <a name="naming--PascalCase"></a><a name="22.3"></a>
+  <a name="naming--PascalCase"></a><a name="23.3"></a>
   - [23.3](#naming--PascalCase) Use PascalCase only when naming constructors or classes. eslint: [`new-cap`](https://eslint.org/docs/rules/new-cap.html) jscs: [`requireCapitalizedConstructors`](http://jscs.info/rule/requireCapitalizedConstructors)
 
     ```javascript
@@ -2995,7 +3010,7 @@ Other Style Guides
     });
     ```
 
-  <a name="naming--leading-underscore"></a><a name="22.4"></a>
+  <a name="naming--leading-underscore"></a><a name="23.4"></a>
   - [23.4](#naming--leading-underscore) Do not use trailing or leading underscores. eslint: [`no-underscore-dangle`](https://eslint.org/docs/rules/no-underscore-dangle.html) jscs: [`disallowDanglingUnderscores`](http://jscs.info/rule/disallowDanglingUnderscores)
 
     > Why? JavaScript does not have the concept of privacy in terms of properties or methods. Although a leading underscore is a common convention to mean “private”, in fact, these properties are fully public, and as such, are part of your public API contract. This convention might lead developers to wrongly think that a change won’t count as breaking, or that tests aren’t needed. tl;dr: if you want something to be “private”, it must not be observably present.
@@ -3015,7 +3030,7 @@ Other Style Guides
     firstNames.set(this, 'Panda');
     ```
 
-  <a name="naming--self-this"></a><a name="22.5"></a>
+  <a name="naming--self-this"></a><a name="23.5"></a>
   - [23.5](#naming--self-this) Don’t save references to `this`. Use arrow functions or [Function#bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind). jscs: [`disallowNodeTypes`](http://jscs.info/rule/disallowNodeTypes)
 
     ```javascript
@@ -3043,7 +3058,7 @@ Other Style Guides
     }
     ```
 
-  <a name="naming--filename-matches-export"></a><a name="22.6"></a>
+  <a name="naming--filename-matches-export"></a><a name="23.6"></a>
   - [23.6](#naming--filename-matches-export) A base filename should exactly match the name of its default export.
 
     ```javascript
@@ -3079,7 +3094,7 @@ Other Style Guides
     // ^ supports both insideDirectory.js and insideDirectory/index.js
     ```
 
-  <a name="naming--camelCase-default-export"></a><a name="22.7"></a>
+  <a name="naming--camelCase-default-export"></a><a name="23.7"></a>
   - [23.7](#naming--camelCase-default-export) Use camelCase when you export-default a function. Your filename should be identical to your function’s name.
 
     ```javascript
@@ -3090,7 +3105,7 @@ Other Style Guides
     export default makeStyleGuide;
     ```
 
-  <a name="naming--PascalCase-singleton"></a><a name="22.8"></a>
+  <a name="naming--PascalCase-singleton"></a><a name="23.8"></a>
   - [23.8](#naming--PascalCase-singleton) Use PascalCase when you export a constructor / class / singleton / function library / bare object.
 
     ```javascript
@@ -3102,7 +3117,7 @@ Other Style Guides
     export default AirbnbStyleGuide;
     ```
 
-  <a name="naming--Acronyms-and-Initialisms"></a>
+  <a name="naming--Acronyms-and-Initialisms"></a><a name="23.9"></a>
   - [23.9](#naming--Acronyms-and-Initialisms) Acronyms and initialisms should always be all capitalized, or all lowercased.
 
     > Why? Names are for readability, not to appease a computer algorithm.
@@ -3142,10 +3157,10 @@ Other Style Guides
 
 ## Accessors
 
-  <a name="accessors--not-required"></a><a name="23.1"></a>
+  <a name="accessors--not-required"></a><a name="24.1"></a>
   - [24.1](#accessors--not-required) Accessor functions for properties are not required.
 
-  <a name="accessors--no-getters-setters"></a><a name="23.2"></a>
+  <a name="accessors--no-getters-setters"></a><a name="24.2"></a>
   - [24.2](#accessors--no-getters-setters) Do not use JavaScript getters/setters as they cause unexpected side effects and are harder to test, maintain, and reason about. Instead, if you do make accessor functions, use getVal() and setVal('hello').
 
     ```javascript
@@ -3172,7 +3187,7 @@ Other Style Guides
     }
     ```
 
-  <a name="accessors--boolean-prefix"></a><a name="23.3"></a>
+  <a name="accessors--boolean-prefix"></a><a name="24.3"></a>
   - [24.3](#accessors--boolean-prefix) If the property/method is a `boolean`, use `isVal()` or `hasVal()`.
 
     ```javascript
@@ -3187,7 +3202,7 @@ Other Style Guides
     }
     ```
 
-  <a name="accessors--consistent"></a><a name="23.4"></a>
+  <a name="accessors--consistent"></a><a name="24.4"></a>
   - [24.4](#accessors--consistent) It’s okay to create get() and set() functions, but be consistent.
 
     ```javascript
@@ -3211,7 +3226,7 @@ Other Style Guides
 
 ## Events
 
-  <a name="events--hash"></a><a name="24.1"></a>
+  <a name="events--hash"></a><a name="25.1"></a>
   - [25.1](#events--hash) When attaching data payloads to events (whether DOM events or something more proprietary like Backbone events), pass an object literal (also known as a "hash")  instead of a raw value. This allows a subsequent contributor to add more data to the event payload without finding and updating every handler for the event. For example, instead of:
 
     ```javascript
@@ -3242,7 +3257,7 @@ Other Style Guides
 
 ## jQuery
 
-  <a name="jquery--dollar-prefix"></a><a name="25.1"></a>
+  <a name="jquery--dollar-prefix"></a><a name="26.1"></a>
   - [26.1](#jquery--dollar-prefix) Prefix jQuery object variables with a `$`. jscs: [`requireDollarBeforejQueryAssignment`](http://jscs.info/rule/requireDollarBeforejQueryAssignment)
 
     ```javascript
@@ -3256,7 +3271,7 @@ Other Style Guides
     const $sidebarBtn = $('.sidebar-btn');
     ```
 
-  <a name="jquery--cache"></a><a name="25.2"></a>
+  <a name="jquery--cache"></a><a name="26.2"></a>
   - [26.2](#jquery--cache) Cache jQuery lookups.
 
     ```javascript
@@ -3284,10 +3299,10 @@ Other Style Guides
     }
     ```
 
-  <a name="jquery--queries"></a><a name="25.3"></a>
+  <a name="jquery--queries"></a><a name="26.3"></a>
   - [26.3](#jquery--queries) For DOM queries use Cascading `$('.sidebar ul')` or parent > child `$('.sidebar > ul')`. [jsPerf](http://jsperf.com/jquery-find-vs-context-sel/16)
 
-  <a name="jquery--find"></a><a name="25.4"></a>
+  <a name="jquery--find"></a><a name="26.4"></a>
   - [26.4](#jquery--find) Use `find` with scoped jQuery object queries.
 
     ```javascript
@@ -3311,7 +3326,7 @@ Other Style Guides
 
 ## ECMAScript 5 Compatibility
 
-  <a name="es5-compat--kangax"></a><a name="26.1"></a>
+  <a name="es5-compat--kangax"></a><a name="27.1"></a>
   - [27.1](#es5-compat--kangax) Refer to [Kangax](https://twitter.com/kangax/)’s ES5 [compatibility table](https://kangax.github.io/es5-compat-table/).
 
 **[⬆ back to top](#table-of-contents)**
@@ -3319,7 +3334,7 @@ Other Style Guides
 <a name="ecmascript-6-styles"></a>
 ## ECMAScript 6+ (ES 2015+) Styles
 
-  <a name="es6-styles"></a><a name="27.1"></a>
+  <a name="es6-styles"></a><a name="28.1"></a>
   - [28.1](#es6-styles) This is a collection of links to the various ES6+ features.
 
 1. [Arrow Functions](#arrow-functions)

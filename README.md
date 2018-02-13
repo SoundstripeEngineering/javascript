@@ -2962,7 +2962,7 @@
     ```
 
   <a name="naming--camelCase"></a><a name="23.2"></a>
-  - [23.2](#naming--camelCase) Use camelCase when naming objects, functions, and instances. eslint: [`camelcase`](https://eslint.org/docs/rules/camelcase.html) jscs: [`requireCamelCaseOrUpperCaseIdentifiers`](http://jscs.info/rule/requireCamelCaseOrUpperCaseIdentifiers)
+  - [23.2](#naming--camelCase) Use *camelCase* when naming objects and instances that are unrelated to API resources, and when naming any functions. Use *snake_case* when naming objects and instances that are related to API resources eslint: [`camelcase`](https://eslint.org/docs/rules/camelcase.html)
 
     ```javascript
     // bad

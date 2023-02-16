@@ -12,8 +12,6 @@
 
 - [6.1](#strings--quotes) Use double quotes `""` for strings. eslint: [`quotes`](https://eslint.org/docs/rules/quotes.html) jscs: [`validateQuoteMarks`](http://jscs.info/rule/validateQuoteMarks)
 
-- [8.2](#arrows--implicit-return) If the function body consists of a single statement returning an [expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Expressions) without side effects, omit the braces and use the implicit return. Otherwise, keep the braces and use a `return` statement. eslint: [`arrow-body-style`](https://eslint.org/docs/rules/arrow-body-style.html) jscs: [`requireShorthandArrowFunctions`](http://jscs.info/rule/requireShorthandArrowFunctions)
-
 - [8.3](#arrows--paren-wrap) In case the expression spans over multiple lines, wrap it in brackets for better readability, but follow [8.4](#arrows--one-arg-parens) and wrap any arguments in parentheses.
 
 - [8.4](#arrows--one-arg-parens) Always use parentheses around arrow function arguments. eslint: [`arrow-parens`](https://eslint.org/docs/rules/arrow-parens.html) jscs: [`disallowParenthesesAroundArrowParam`](http://jscs.info/rule/disallowParenthesesAroundArrowParam)

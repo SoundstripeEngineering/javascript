@@ -8,6 +8,26 @@
 [![Downloads](https://img.shields.io/npm/dm/eslint-config-airbnb-base.svg)](https://www.npmjs.com/package/eslint-config-airbnb-base)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/airbnb/javascript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+## Soundstripe Updates
+
+- [6.1](#strings--quotes) Use double quotes `""` for strings. eslint: [`quotes`](https://eslint.org/docs/rules/quotes.html) jscs: [`validateQuoteMarks`](http://jscs.info/rule/validateQuoteMarks)
+
+- [8.2](#arrows--implicit-return) If the function body consists of a single statement returning an [expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Expressions) without side effects, omit the braces and use the implicit return. Otherwise, keep the braces and use a `return` statement. eslint: [`arrow-body-style`](https://eslint.org/docs/rules/arrow-body-style.html) jscs: [`requireShorthandArrowFunctions`](http://jscs.info/rule/requireShorthandArrowFunctions)
+
+- [8.3](#arrows--paren-wrap) In case the expression spans over multiple lines, wrap it in brackets for better readability, but follow [8.4](#arrows--one-arg-parens) and wrap any arguments in parentheses.
+
+- [8.4](#arrows--one-arg-parens) Always use parentheses around arrow function arguments. eslint: [`arrow-parens`](https://eslint.org/docs/rules/arrow-parens.html) jscs: [`disallowParenthesesAroundArrowParam`](http://jscs.info/rule/disallowParenthesesAroundArrowParam)
+
+- [11.2](#generators--spacing) Make sure generator function signatures are spaced properly. eslint: [`generator-star-spacing`](https://eslint.org/docs/rules/generator-star-spacing)
+
+- [15.1](#comparison--eqeqeq) Use `===` and `!==` over `==` and `!=` EXCEPT in the case of null. eslint: [`eqeqeq`](https://eslint.org/docs/rules/eqeqeq.html)
+
+- [15.8](#comparison--no-mixed-operators) When mixing operators, enclose them in parentheses. The only exception is when using only standard arithmetic operators that have the same order of operation (`+` mixed with only `-`, or `*` mixed with only `/`). eslint: [`no-mixed-operators`](https://eslint.org/docs/rules/no-mixed-operators.html)
+
+- [21.1](#semicolons--disallowed) **Nope.** eslint: [`semi`](https://eslint.org/docs/rules/semi.html) jscs: [`disallowSemicolons`](http://jscs.info/rule/disallowSemicolons)
+
+- [23.2](#naming--camelCase) Use **camelCase** when naming objects and instances that are unrelated to API resources, and when naming any functions. Use **snake_case** when naming objects and instances that are related to API resources eslint: [`camelcase`](https://eslint.org/docs/rules/camelcase.html)
+
 ## Table of Contents
 
   1. [Types](#types)
